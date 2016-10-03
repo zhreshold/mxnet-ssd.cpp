@@ -1,3 +1,11 @@
+# User defined
+/build/*
+!/build/CMakeLists.txt
+!/build/build_script.sh
+!/build/create_vs2013_project.bat
+!/build/create_vs2015_project.bat
+!/build/generate_eclipse_cdt.sh
+
 # Compiled Object files
 *.slo
 *.lo
