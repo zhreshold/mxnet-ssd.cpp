@@ -10,22 +10,22 @@
 
 namespace det {
 class Detector {
-public:
+ public:
   Detector(std::string model_prefix, int epoch, int width, int height,
            float mean_r, float mean_g, float mean_b,
-           int device_type=1, int device_id=1);
+           int device_type=1, int device_id=0);
 
-  void detect(std::string in_img, std::string out_img);
-private:
+
+  void detect(std::string in_img, std::string out_img,
+    std::vector<std::string> class_names, float visu_thresh,
+    int max_disp_size, std::string save_result);
+ private:
   PredictorHandle predictor_;
   std::vector<char> buffer_;
-  const char *input_nodes_[] = {"data"};
-  int width_;
-  int height_;
-  const mx_uint input_shape_indptr_[] = {0, 4};
-  const mx_uint input_shape_data_[4];
+  unsigned int width_;
+  unsigned int height_;
   float mean_r_;
   float mean_g_;
   float mean_b_;
-}
-}
+};  // class Detector
+}  //namespace det

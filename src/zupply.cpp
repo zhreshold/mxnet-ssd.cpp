@@ -109,7 +109,7 @@ namespace zz
 		namespace utf8
 		{
 			// The typedefs for 8-bit, 16-bit and 32-bit unsigned integers
-			// You may need to change them to match your system. 
+			// You may need to change them to match your system.
 			// These typedefs have the same names as ones from cstdint, or boost/cstdint
 			typedef unsigned char   uint8_t;
 			typedef unsigned short  uint16_t;
@@ -198,7 +198,7 @@ namespace zz
 							return NOT_ENOUGH_ROOM;
 					}
 
-					// Do we have enough memory?     
+					// Do we have enough memory?
 					if (std::distance(it, end) < length)
 						return NOT_ENOUGH_ROOM;
 
@@ -294,7 +294,7 @@ namespace zz
 					return validate_next(it, end, 0);
 				}
 
-			} // namespace internal 
+			} // namespace internal
 
 			/// The library API - functions intended to be called by the users
 
@@ -7703,7 +7703,7 @@ namespace zz
 					int num_channels);
 
 
-				// The following functions interpret image data as gamma-corrected sRGB. 
+				// The following functions interpret image data as gamma-corrected sRGB.
 				// Specify STBIR_ALPHA_CHANNEL_NONE if you have no alpha channel,
 				// or otherwise provide the index of the alpha channel. Flags value
 				// of 0 will probably do the right thing if you're not sure what
@@ -7843,7 +7843,7 @@ namespace zz
 					stbir_colorspace space, void *alloc_context,
 					float s0, float t0, float s1, float t1);
 				// (s0, t0) & (s1, t1) are the top-left and bottom right corner (uv addressing style: [0, 1]x[0, 1]) of a region of the input image to use.
-				
+
 #ifndef STBIR_ASSERT
 //#include <assert.h>
 #define STBIR_ASSERT(x) assert(x)
@@ -10348,7 +10348,7 @@ namespace zz
 			}
 		} // namespace jo
 	}
-	// \endcond 
+	// \endcond
 
 	namespace fmt
 	{
@@ -11451,13 +11451,13 @@ namespace zz
 			return *gmtime_r(&t, &temp);
 #else
 			return temp; // return default tm struct, no idea what it is
-#endif 
+#endif
 		}
 
 		std::wstring utf8_to_wstring(std::string &u8str)
 		{
 #if ZUPPLY_OS_WINDOWS
-			// windows use 16 bit wstring 
+			// windows use 16 bit wstring
 			std::u16string u16str = fmt::utf8_to_utf16(u8str);
 			return std::wstring(u16str.begin(), u16str.end());
 #else
@@ -11470,7 +11470,7 @@ namespace zz
 		std::string wstring_to_utf8(std::wstring &wstr)
 		{
 #if ZUPPLY_OS_WINDOWS
-			// windows use 16 bit wstring 
+			// windows use 16 bit wstring
 			std::u16string u16str(wstr.begin(), wstr.end());
 			return fmt::utf16_to_utf8(u16str);
 #else
@@ -11630,7 +11630,7 @@ namespace zz
 			return remove_file(path);
 		}
 
-#if ZUPPLY_OS_UNIX 
+#if ZUPPLY_OS_UNIX
 		// for nftw tree walk directory operations, so for unix only
 		int nftw_remove(const char *path, const struct stat *sb, int flag, struct FTW *ftwbuf)
 		{
@@ -11841,7 +11841,7 @@ namespace zz
 #elif ZUPPLY_OS_UNIX
 			struct stat st;
 			int ret = stat(path.c_str(), &st);
-			return considerFile ? (ret == 0) : S_ISDIR(st.st_mode);			
+			return considerFile ? (ret == 0) : S_ISDIR(st.st_mode);
 #endif
 			return false;
 		}
@@ -13210,7 +13210,7 @@ namespace zz
 			void RotateFileSink::rotate()
 			{
 				std::lock_guard<std::mutex> lock(mutex_);
-				// check again in case other thread 
+				// check again in case other thread
 				// just waited for this operation
 				if (currentSize_ > maxSizeInByte_)
 				{
