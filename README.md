@@ -5,6 +5,9 @@ Note that python detection module is already included in mxnet-ssd.
 The goal of this repository is to create a test end for mxnet-ssd with no external
 dependency.
 
+![demo](https://cloud.githubusercontent.com/assets/3307514/19162698/900ec9ec-8bbe-11e6-9f24-505906c96371.jpg)
+![demo1](https://cloud.githubusercontent.com/assets/3307514/19162697/8f14062e-8bbe-11e6-8f5f-1a4cefb6b428.jpg)
+
 ### Installation
 
 #### Ubuntu/CentOS
