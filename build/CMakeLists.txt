@@ -8,6 +8,7 @@ SET(PROJECT_NAME "ssd")	# The project name
 #-------------------- NO MIDIFICATION ------------------------#
 PROJECT(${PROJECT_NAME})
 
+cmake_policy(SET CMP0015 NEW)
 FILE(GLOB ALL_HEADERS "../src/*.h*")
 FILE(GLOB ALL_SOURCES "../src/*.c*")
 INCLUDE_DIRECTORIES("../include")
