@@ -10,7 +10,7 @@ dependency.
 
 ### Installation
 
-#### Ubuntu/CentOS
+#### Ubuntu/Debian
 * Install prerequisites, via `sudo apt-get install cmake git build-essentials`
 and make sure your c++ compiler support C++11 (g++4.8 or above): `g++ --version`
 * Clone this repo recursively:
