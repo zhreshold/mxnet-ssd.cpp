@@ -47,7 +47,7 @@
 // Define __func__ macro
 #ifndef __func__
 #define __func__ __FUNCTION__
-#endif 
+#endif
 
 // Define NDEBUG in Release Mode, ensure assert() disabled.
 #if (!defined(_DEBUG) && !defined(NDEBUG))
@@ -342,7 +342,7 @@ namespace zz
 	using Size = Size_<int>;
 
 	template<typename _Tp> class Rect_;
-	/*! 
+	/*!
 	 * \brief template 2D point class.
 	 * The class defines a point in 2D space. Data type of the point coordinates is specified
 	 * as a template parameter. There are a few shorter aliases available for user convenience.
@@ -437,7 +437,7 @@ namespace zz
 	 */
 	typedef std::vector<Point> Vecpts;
 
-	/*! 
+	/*!
 	 * \brief The 2D up-right rectangle class
 	 * The class represents a 2D rectangle with coordinates of the specified data type.
 	 * Normally, zz::Rect ~ zz::Rect_<int> is used.
@@ -809,7 +809,7 @@ namespace zz
 		* \param height
 		* \param width
 		*/
-		void resize(int width, int height);
+		void resize(int height, int width);
 
 		/*!
 		* \brief resize Resize image given ratio to the old size
@@ -876,7 +876,7 @@ namespace zz
 		 * \param range The range of new stored data, normally 1.0 is used.
 		 */
 		void from_normal(const Image& from, float range = 1.0f);
-		
+
 		/*!
 		* \brief resize Resize image given new size
 		* \param sz
@@ -3103,7 +3103,7 @@ namespace zz
 			int				count_;		//!< reference count
 			Value			val_;		//!< stored values
 			std::vector<std::function<void()>> callback_;	//!< call these when option found
-			std::vector<std::function<void()>> othercall_;	//!< call these when option not found	
+			std::vector<std::function<void()>> othercall_;	//!< call these when option not found
 		};
 
 		/*!
@@ -3275,7 +3275,7 @@ namespace zz
 			void parse_value(ArgOption* ptr, const std::string& value);
 
 			std::vector<ArgOption> options_;	//!< hooked options
-			std::unordered_map<char, std::size_t> shortKeys_;		//!< short keys -a -b 
+			std::unordered_map<char, std::size_t> shortKeys_;		//!< short keys -a -b
 			std::unordered_map<std::string, std::size_t> longKeys_;	//!< long keys --long --version
 			std::vector<Value>	args_;	//!< anything not belong to option will be stored here
 			std::vector<std::string> errors_;	//!< store parsing errors
@@ -3389,7 +3389,7 @@ namespace zz
 				std::ostringstream buffer_;
 			};
 		}
-		
+
 		// \endcond
 
 		/*!
@@ -5296,7 +5296,7 @@ namespace zz
 				int j1 = (std::max)(c0, c1);
 				detach();
 				ImageBase<_Tp> tmp(height, width, channels_);
-				
+
 				// temporary solution, not optimized
 				_Tp* pOld = ptr(i0, j0, 0);
 				_Tp* pNew = tmp.ptr(0);
@@ -5340,5 +5340,3 @@ namespace zz
 } // namespace zz
 
 #endif //END _ZUPPLY_ZUPPLY_HPP_
-
-

@@ -13809,7 +13809,7 @@ namespace zz
 		}
 	}
 
-	void Image::resize(int width, int height)
+	void Image::resize(int height, int width)
 	{
 		assert(height > 0 && "height must > 0!");
 		assert(width > 0 && "width must > 0!");

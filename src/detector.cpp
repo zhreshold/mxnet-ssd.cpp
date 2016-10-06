@@ -251,7 +251,7 @@ void Detector::detect(std::string in_img, std::string out_img,
   CImg<unsigned char> canvas = zimage_to_cimg(bak_img);
 
   // resize image
-  image.resize(width_, height_);
+  image.resize(height_, width_);
   int size = image.channels() * image.cols() * image.rows();
   std::vector<float> in_data(size);
 
