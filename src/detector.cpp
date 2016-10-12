@@ -17,6 +17,22 @@ using namespace cimg_library;
 using namespace zz;
 
 namespace det {
+std::vector<std::string> load_class_map(std::string map_file) {
+  std::vector<std::string> classes;
+  fs::FileReader fr(map_file);
+  if (!fr.is_open()) {
+    auto logger = log::get_logger("default");
+    logger->error("Can't open file: ") << map_file << " to read.";
+    return classes;
+  }
+  std::string line = fr.next_line(true);
+  while (!line.empty()) {
+    classes.push_back(line);
+    line = fr.next_line(true);
+  }
+  return classes;
+}
+
 void cimg_draw_box(CImg<unsigned char> &img, int x0, int y0, int x1, int y1,
                    const unsigned char *color, int thickness = 1) {
   // wrapper for drawing lines
@@ -55,7 +71,7 @@ void cimg_draw_text(CImg<unsigned char> &img, int x, int y, const char *text,
 }
 
 void save_detection_results(std::string filename, std::vector<float> &dets,
-                            std::vector<std::string> &class_names, float thresh=0) {
+                            std::vector<std::string> class_names, float thresh) {
   // id, score, xmin, ymin, xmax, ymax
   assert (dets.size() % 6 == 0);
   fs::FileEditor fe(filename, true);
@@ -84,6 +100,33 @@ void save_detection_results(std::string filename, std::vector<float> &dets,
   }
   fe.flush();
   fe.close();
+}
+
+CImg<unsigned char> zimage_to_cimg(Image &zimg) {
+  CImg<unsigned char> cimg(zimg.cols(), zimg.rows(), 1, zimg.channels());
+  unsigned char *ptr = zimg.ptr();
+  for (int r = 0; r < cimg.height(); ++r) {
+    for (int c = 0; c < cimg.width(); ++c) {
+      for (int k = 0; k < cimg.spectrum(); ++k) {
+        cimg(c, r, 0, k) = *(ptr++);
+      }
+    }
+  }
+  return cimg;
+}
+
+Image cimg_to_zimage(CImg<unsigned char> &cimg) {
+  assert (cimg.depth() == 1);  // depth image not supported
+  Image zimg(cimg.height(), cimg.width(), cimg.spectrum());
+  // use high level access, this may impact performance a little bit, but safer
+  for (int r = 0; r < cimg.height(); ++r) {
+    for (int c = 0; c < cimg.width(); ++c) {
+      for (int k = 0; k < cimg.spectrum(); ++k) {
+        zimg(r, c, k) = cimg(c, r, 0, k);
+      }
+    }
+  }
+  return zimg;
 }
 
 void cimg_visualize_detections(CImg<unsigned char> &img, std::vector<float> &dets,
@@ -131,31 +174,41 @@ void cimg_visualize_detections(CImg<unsigned char> &img, std::vector<float> &det
   }
 }
 
-CImg<unsigned char> zimage_to_cimg(Image &zimg) {
-  CImg<unsigned char> cimg(zimg.cols(), zimg.rows(), 1, zimg.channels());
-  unsigned char *ptr = zimg.ptr();
-  for (int r = 0; r < cimg.height(); ++r) {
-    for (int c = 0; c < cimg.width(); ++c) {
-      for (int k = 0; k < cimg.spectrum(); ++k) {
-        cimg(c, r, 0, k) = *(ptr++);
-      }
-    }
+void visualize_detection(std::string img_path,
+               std::vector<float> &detections,
+               float visu_thresh,
+               int max_disp_size,
+               std::vector<std::string> class_names,
+               std::string out_file) {
+  Image image(img_path.c_str());
+  Image bak_img = image;
+  // resize for display
+  if (max_disp_size > 0) {
+    float max_size = max_disp_size;
+    float ratio1 = max_size / image.rows();
+    float ratio2 = max_size / image.cols();
+    float ratio = ratio1 > ratio2 ? ratio2 : ratio1;
+    bak_img.resize(ratio);
   }
-  return cimg;
-}
+  CImg<unsigned char> canvas = zimage_to_cimg(bak_img);
+  cimg_visualize_detections(canvas, detections, class_names, visu_thresh);
 
-Image cimg_to_zimage(CImg<unsigned char> &cimg) {
-  assert (cimg.depth() == 1);  // depth image not supported
-  Image zimg(cimg.height(), cimg.width(), cimg.spectrum());
-  // use high level access, this may impact performance a little bit, but safer
-  for (int r = 0; r < cimg.height(); ++r) {
-    for (int c = 0; c < cimg.width(); ++c) {
-      for (int k = 0; k < cimg.spectrum(); ++k) {
-        zimg(r, c, k) = cimg(c, r, 0, k);
-      }
+  // save drawings if required
+  if (!out_file.empty()) {
+    Image oimg = cimg_to_zimage(canvas);
+    try {
+      oimg.save(out_file.c_str(), 100);
+    } catch (std::exception &e) {
+      auto logger = log::get_logger("default");
+      logger->error() << e.what();
     }
   }
-  return zimg;
+
+  // display
+  CImgDisplay main_disp(canvas, "detection");
+  while (!main_disp.is_closed()) {
+    main_disp.wait();
+  }
 }
 
 Detector::Detector(std::string model_prefix, int epoch, int width,
@@ -221,9 +274,7 @@ Detector::Detector(std::string model_prefix, int epoch, int width,
   }
 }
 
-void Detector::detect(std::string in_img, std::string out_img,
-                      std::vector<std::string> class_names, float visu_thresh,
-                      int max_disp_size, std::string save_result) {
+std::vector<float> Detector::detect(std::string in_img) {
   auto logger = log::get_logger("default");
   if (!os::is_file(in_img)) {
     std::cerr << "Image file: " << in_img << " does not exist" << std::endl;
@@ -238,17 +289,6 @@ void Detector::detect(std::string in_img, std::string out_img,
     std::cerr << "RGB image required" << std::endl;
     exit(-1);
   }
-
-  // resize for display
-  Image bak_img = image;
-  if (max_disp_size > 0) {
-    float max_size = max_disp_size;
-    float ratio1 = max_size / image.rows();
-    float ratio2 = max_size / image.cols();
-    float ratio = ratio1 > ratio2 ? ratio2 : ratio1;
-    bak_img.resize(ratio);
-  }
-  CImg<unsigned char> canvas = zimage_to_cimg(bak_img);
 
   // resize image
   image.resize(height_, width_);
@@ -284,28 +324,6 @@ void Detector::detect(std::string in_img, std::string out_img,
   std::vector<float> outputs(tt_size);
   MXPredGetOutput(predictor_, 0, outputs.data(), tt_size);
 
-  // save results
-  if (!save_result.empty()) {
-    save_detection_results(save_result, outputs, class_names);
-  }
-
-  // visualize detections
-  cimg_visualize_detections(canvas, outputs, class_names, visu_thresh);
-
-  // save image
-  if (!out_img.empty()) {
-    Image oimg = cimg_to_zimage(canvas);
-    try {
-      oimg.save(out_img.c_str(), 100);
-    } catch (std::exception &e) {
-      logger->error() << e.what();
-    }
-  }
-
-  // display
-  CImgDisplay main_disp(canvas, "detection");
-  while (!main_disp.is_closed()) {
-    main_disp.wait();
-  }
+  return outputs;
 }
 }  // namespace det

@@ -45,7 +45,7 @@ cd $REPO_ROOT/build
 Full usage info: `./ssd -h`
 
 ```
-Usage: ssd  [-hv] [-o <FILE>] [-m <FILE>] [-e <INT>] [--width <INT>] [--height <INT>] [-r <FLOAT>] [-g <FLOAT>] [-b <FLOAT>] [-t <FLOAT>] [--gpu <INT>] [--disp-size <INT>] [--save-result <FILE>] <FILE>
+Usage: ssd  [-hv] [-o <FILE>] [-m <FILE>] [-e <INT>] [--class-map <FILE>] [--width <INT>] [--height <INT>] [-r <FLOAT>] [-g <FLOAT>] [-b <FLOAT>] [-t <FLOAT>] [--gpu <INT>] [--disp-size <INT>] [--save-result <FILE>] <FILE>
 
   Required options:
   <FILE>                    input image
@@ -56,6 +56,7 @@ Usage: ssd  [-hv] [-o <FILE>] [-m <FILE>] [-e <INT>] [--width <INT>] [--height <
   -o, --out=FILE            output detection result to image
   -m, --model=FILE          load model prefix(default: deploy_ssd_300)
   -e, --epoch=INT           load model epoch(default: 1)
+  --class-map=FILE          load classes from text file
   --width=INT               resize width(default: 300)
   --height=INT              resize height(default: 300)
   -r, --red=FLOAT           red mean pixel value(default: 123)
@@ -63,8 +64,9 @@ Usage: ssd  [-hv] [-o <FILE>] [-m <FILE>] [-e <INT>] [--width <INT>] [--height <
   -b, --blue=FLOAT          blue mean pixel value(default: 104)
   -t, --thresh=FLOAT        visualize threshold(default: 0.5)
   --gpu=INT                 gpu id to detect with, default use cpu(default: -1)
-  --disp-size=INT           display size, longer side(default: 640)
+  --disp-size=INT           display size, -1 to disable display(default: 640)
   --save-result=FILE        save result in text file
+
 
 ```
 
@@ -72,3 +74,4 @@ Usage: ssd  [-hv] [-o <FILE>] [-m <FILE>] [-e <INT>] [--width <INT>] [--height <
 * [CImg](https://github.com/dtschump/CImg)
 * [MXNet](https://github.com/dmlc/mxnet)
 * [zupply](https://github.com/zhreshold/zupply)
+* [OpenBLAS](https://github.com/xianyi/OpenBLAS)

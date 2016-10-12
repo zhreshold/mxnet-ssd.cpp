@@ -15,10 +15,11 @@ class Detector {
            float mean_r, float mean_g, float mean_b,
            int device_type=1, int device_id=0);
 
+  std::vector<float> detect(std::string in_img);
+  std::vector<float> detect(const char *in_img) {
+    return detect(std::string(in_img));
+  }
 
-  void detect(std::string in_img, std::string out_img,
-    std::vector<std::string> class_names, float visu_thresh,
-    int max_disp_size, std::string save_result);
  private:
   PredictorHandle predictor_;
   std::vector<char> buffer_;
@@ -28,4 +29,18 @@ class Detector {
   float mean_g_;
   float mean_b_;
 };  // class Detector
+
+void visualize_detection(std::string img_path,
+               std::vector<float> &detections,
+               float visu_thresh,
+               int max_disp_size,
+               std::vector<std::string> class_names = {},
+               std::string out_file = "");
+
+void save_detection_results(std::string out_file,
+                     std::vector<float> &detections,
+                     std::vector<std::string> class_names = {},
+                     float thresh = 0);
+
+std::vector<std::string> load_class_map(std::string map_file);
 }  //namespace det
