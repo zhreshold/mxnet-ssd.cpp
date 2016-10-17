@@ -1,6 +1,1 @@
-[submodule "OpenBLAS"]
-	path = OpenBLAS
-	url = https://github.com/xianyi/OpenBLAS.git
-[submodule "mxnet"]
-	path = mxnet
-	url = https://github.com/zhreshold/mxnet.git
+
