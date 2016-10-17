@@ -314,7 +314,6 @@ std::vector<float> Detector::detect(std::string in_img) {
   MXPredSetInput(predictor_, "data", in_data.data(), static_cast<mx_uint>(size));
   time::Timer timer;
   MXPredForward(predictor_);
-  logger->info("Forward elapsed time: ") << timer.to_string();
   MXPredGetOutputShape(predictor_, 0, &shape, &shape_len);
   mx_uint tt_size = 1;
   for (mx_uint i = 0; i < shape_len; ++i) {
@@ -323,7 +322,7 @@ std::vector<float> Detector::detect(std::string in_img) {
   assert(tt_size % 6 == 0);
   std::vector<float> outputs(tt_size);
   MXPredGetOutput(predictor_, 0, outputs.data(), tt_size);
-
+  logger->info("Forward elapsed time: ") << timer.to_string();
   return outputs;
 }
 }  // namespace det
