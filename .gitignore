@@ -2,8 +2,8 @@
 /build/*
 !/build/CMakeLists.txt
 !/build/build_script.sh
-!/build/create_vs2013_project.bat
-!/build/create_vs2015_project.bat
+!/build/create_sln_vs2013.bat
+!/build/create_sln_vs2015.bat
 !/build/generate_eclipse_cdt.sh
 !/build/install.sh
 
@@ -21,6 +21,8 @@
 *.so
 *.dylib
 *.dll
+!/lib/libopenblas.dll
+!/lib/libmxnet.dll
 
 # Fortran module files
 *.mod
@@ -31,6 +33,8 @@
 *.la
 *.a
 *.lib
+!/lib/libopenblas.lib
+!/lib/libmxnet.lib
 
 # Executables
 *.exe
