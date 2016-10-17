@@ -22,7 +22,23 @@ bash ./install.sh
 ```
 
 #### Windows
-Installation guide to be added.
+* Install prerequisite: 
+    - `cmake` and `git`(git is optional, highly recommended), they both provide installer online. 
+    - Install Visual Studio 2015(verified version).
+* Clone this repo:
+```
+git clone https://github.com/zhreshold/mxnet-ssd.cpp
+git checkout win
+# or you can download from github as zip file if git was not installed
+# be sure to switch to branch win before download
+```
+* Generate VS solution:
+```
+cd /path/to/repo/build
+./create_sln_vs2015.bat
+# the solution will be created in build/vc14/
+# open this solution and build, the executable and dlls will be copied to /repo/build if success
+```
 
 #### OSX
 Installation guide to be added.
