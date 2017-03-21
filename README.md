@@ -44,7 +44,7 @@ cd /path/to/repo/build
 Installation guide to be added.
 
 ### Download the model
-Download the pretrained [model](https://dl.dropboxusercontent.com/u/39265872/deploy_ssd_300_voc0712.zip) and unzip to the same folder as the executable.
+Download the pretrained [model](https://github.com/zhreshold/mxnet-ssd.cpp/releases/download/v0.1/deploy_ssd_300_voc0712.zip) and unzip to the same folder as the executable.
 By default it's the `build` directory.
 
 You can put the model any where you like, as long as you run the program with `--model /path/to/model_prefix`
